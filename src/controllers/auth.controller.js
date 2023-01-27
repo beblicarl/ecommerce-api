@@ -48,7 +48,7 @@ const login = (req, res, { err, user, info }) => {
         });
 
         return res.status(200).json({ 
-            message: "Login successful",
+            message: `Welcome ${user.firstname} ${user.lastname}`,
             token: token 
         });
     });
