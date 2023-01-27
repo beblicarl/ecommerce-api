@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const productSchema = new Schema({
+const ProductModel = new Schema({
     author : {
        type: Schema.Types.ObjectId,
        required: true,
@@ -29,6 +29,6 @@ const productSchema = new Schema({
     timestamps: true
     })
 
-const Product = mongoose.model('Product', productSchema)
+const Product = mongoose.model('Product', ProductModel)
 
 module.exports = Product
