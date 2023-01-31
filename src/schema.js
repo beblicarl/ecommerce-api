@@ -31,7 +31,7 @@ const signinSchema = Joi.object({
 
 const fetchProductSchema = Joi.object({
 	params: {
-		id :Joi.number()
+		id :Joi.string()
 			.required()
 	}
 })
@@ -40,26 +40,26 @@ const createProductSchema = Joi.object({
 	body: {
 		 name: Joi.string().min(2).max(30).required(),
 		 description: Joi.string().min(2).required(),
-		 category: Joi.string().min(2),
-		 price: Joi.number().required()
+		 category: Joi.string().min(2).required(),
+		 price: Joi.number().required().default(0)
 	 
 	}
 })
 const updateProductSchema = Joi.object({
 	params : {
-		id : Joi.number().required()
+		id : Joi.string().required()
 	},
 	body: {
-		 name: Joi.string().min(2).max(30).required(),
-		 description: Joi.string().min(2).required(),
+		 name: Joi.string().min(2).max(30),
+		 description: Joi.string().min(2),
 		 category: Joi.string().min(2),
-		 price: Joi.number().required()
+		 price: Joi.number()
 	 
 	}
 })
 const deleteProductSchema = Joi.object({
 	params: {
-		id :Joi.number()
+		id :Joi.string()
 			.required()
 	}
 })
