@@ -1,4 +1,8 @@
 const Product = require("../models/product.model");
+const {
+    transformProductResponse,
+    transformProductUpdateResponse
+} = require("../common/transform")
 
 
 
@@ -6,8 +10,13 @@ const Product = require("../models/product.model");
 //fetch all products
 const fetchAllProducts = async(req, res) => {
     try {
-        const products = await Product.find({})
-        res.status(200).send(products)
+        const products = await Product.find().sort({ createdAt: "desc" })
+        await res.status(200).json({
+            success: true,
+            data: products.map((product) => ({
+              ...transformProductUpdateResponse(product)
+            })),
+          });
     } catch (error) {
         res.status(400).send(error)
     }
@@ -20,7 +29,12 @@ const fetchAllProducts = async(req, res) => {
         if(!product) {
             res.status(404).send({error: "Product not found"})
         }
-        res.status(200).send(product) 
+        res.status(200).json({
+            success: true,
+            data: {
+              ...transformProductUpdateResponse(product)
+            },
+          });
     } catch (error) {
         res.status(400).send(error)
     }
@@ -34,7 +48,9 @@ const createProduct = async(req, res) => {
             author: req.user._id
         })
         await newProduct.save()
-        res.status(201).send(newProduct)
+        res.status(201).json({
+            message : "Product successfully created",
+            data : transformProductResponse(newProduct)})
     } catch (error) {
         console.log({error})
         res.status(400).send({message: "error"})
@@ -56,12 +72,16 @@ const updateProduct = async(req, res) => {
         const product = await Product.findOne({ _id: req.params.id})
     
         if(!product){
-            return res.status(404).send()
+            return res.status(404).send('Product does not exist')
         }
 
         updates.forEach((update) => product[update] = req.body[update])
         await product.save()
-        res.send(product)
+        res.status(200).json({ 
+            message : "Product successfully updated",
+            data :
+            transformProductUpdateResponse(product)
+    })
     } catch (error) {
         res.status(400).send(error)
     }
@@ -74,7 +94,9 @@ const deleteProduct = async(req, res) => {
         if(!deletedProduct) {
             res.status(404).send({error: "Product not found"})
         }
-        res.send(deletedProduct)
+        res.status(200).json({
+            message : "Product successfully deleted"
+        })
     } catch (error) {
         res.status(400).send(error)
     }
