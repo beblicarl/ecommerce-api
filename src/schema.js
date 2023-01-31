@@ -64,11 +64,28 @@ const deleteProductSchema = Joi.object({
 	}
 })
 
+const addProductToCartSchema = Joi.object({
+	params : {
+		productId : Joi.string().required(),
+	},
+	body:{		
+		quantity : Joi.number().required()
+	}
+})
+
+const deleteProductFromCart = Joi.object({
+	params : {
+		productId : Joi.string().required()
+	}
+})
+
 module.exports = {
     signinSchema,
     signupSchema,
 	fetchProductSchema,
 	createProductSchema,
 	updateProductSchema,
-	deleteProductSchema
+	deleteProductSchema,
+	addProductToCartSchema,
+	deleteProductFromCart
 }
